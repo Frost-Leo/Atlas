@@ -58,6 +58,13 @@ class TomlReader:
 
         Raises:
             RuntimeError: When file reading fails, parsing fails, or required environment variable is missing
+
+        Example:
+            >>> reader = TomlReader()
+            >>> # Read with environment variable substitution
+            >>> config = reader.read('config.toml', replace=True)
+            >>> # Read without any processing
+            >>> raw_config = reader.read('config.toml', replace=False)
         """
         try:
             with open(Path(path).resolve(), 'rb') as toml_file:
