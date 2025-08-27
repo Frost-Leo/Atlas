@@ -14,6 +14,7 @@ This module provides the base model class for all Pydantic models in the Atlas p
 establishing common configuration and behavior patterns.
 """
 
+from pathlib import Path
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, Iterator
 
@@ -33,6 +34,7 @@ class AtlasBaseModel(BaseModel):
         - keys: Return field names for mapping protocol
         - __getitem__: Enable dictionary-style field access
         - __iter__: Enable iteration over model fields as key-value pairs
+        - generate_file: Generate configuration file from model fields
     """
 
     model_config = ConfigDict(
@@ -116,3 +118,59 @@ class AtlasBaseModel(BaseModel):
             version: 1.0.0
         """
         return iter(self.model_dump().items())
+
+    def generate_file(self) -> bool:
+        """
+        **generate_file: Generate configuration file from model fields**
+
+        Generates a configuration file based on the model's fields and their values.
+        The file format depends on the file extension - special formatting is applied
+        for .env files (no spaces around '='), while other files use spaces.
+
+        The method expects the model to have an OUTPUT_FILE_PATH attribute that
+        specifies where to write the generated file.
+
+        Returns:
+            bool: True if file was successfully generated, False if OUTPUT_FILE_PATH
+                  attribute is not present
+
+        Raises:
+            OSError: If file creation fails due to permissions or disk issues
+
+        Example:
+            >>> class Config(AtlasBaseModel):
+            ...     OUTPUT_FILE_PATH = '.env'
+            ...     api_key: str = Field(description='API authentication key')
+            ...     debug: bool = Field(default=False, description='Debug mode flag')
+            ...
+            >>> config = Config(api_key='secret123')
+            >>> config.generate_file()
+            True
+
+            Generated .env file:
+            ```
+            # API authentication key
+            api_key=secret123
+
+            # Debug mode flag
+            debug=False
+            ```
+        """
+        if hasattr(self, 'OUTPUT_FILE_PATH'):
+            path = Path(self.OUTPUT_FILE_PATH)
+            lines = list()
+
+            for k, item in self.model_fields.items():
+                lines.append(f"# {item.description}") if item.description else None
+
+                v = getattr(self, k)
+
+                lines.append(f"{k}={v}") if '.env' in str(path) else lines.append(f"{k} = {v}")
+                lines.append("")
+
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("\n".join(lines), encoding='utf-8')
+
+            return True
+
+        return False

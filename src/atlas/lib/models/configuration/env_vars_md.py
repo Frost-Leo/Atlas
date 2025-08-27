@@ -20,6 +20,7 @@ used throughout the Atlas project with the following features:
 
 import os
 from pydantic import Field
+from typing import ClassVar, Optional
 
 from atlas.lib.models import AtlasBaseModel
 from atlas.utils.toolkit import MachineInfo
@@ -33,6 +34,7 @@ class EnvVarsModel(AtlasBaseModel):
     Provides automatic machine detection and configurable project paths.
 
     Class Attributes:
+        - OUTPUT_FILE_PATH: Path where the .env file will be generated when calling generate_file(). Automatically set to {ATLAS_ROOT}/.env if ATLAS_ROOT environment variable exists, None otherwise
         - MACHINE_HOSTNAME: Current machine's hostname (computer name)
         - MACHINE_ID: Unique identifier for the current machine
         - ATLAS_ROOT: Project root directory path
@@ -42,62 +44,44 @@ class EnvVarsModel(AtlasBaseModel):
         - ATLAS_ENV: Current runtime environment identifier
     """
 
-    MACHINE_HOSTNAME: str = Field(
-        default_factory=MachineInfo.get_machine_hostname,
-        description='The hostname (computer name) of the machine currently running the application'
-    )
+    OUTPUT_FILE_PATH: ClassVar[Optional[str]] = os.path.join(os.getenv('ATLAS_ROOT', ''), '.env') if os.getenv('ATLAS_ROOT') else None
+    """Path to the generated .env file (defaults to {ATLAS_ROOT}/.env)"""
+
+    MACHINE_HOSTNAME: str = Field(default_factory=MachineInfo.get_machine_hostname, description='The hostname (computer name) of the machine currently running the application')
     """Hostname (computer name) of the current machine, automatically detected at runtime"""
 
-    MACHINE_ID: str = Field(
-        default_factory=MachineInfo.get_machine_id,
-        description='Unique identifier of the physical machine currently running the application'
-    )
+    MACHINE_ID: str = Field(default_factory=MachineInfo.get_machine_id, description='Unique identifier of the physical machine currently running the application')
     """Unique machine identifier used for distributed system coordination and logging"""
 
-    c: str = Field(
-        default_factory=lambda: os.getenv('ATLAS_ROOT'),
-        description='The root directory path of the Atlas project file structure'
-    )
+    ATLAS_ROOT: str = Field(default_factory=lambda: os.getenv('ATLAS_ROOT'), description='The root directory path of the Atlas project file structure')
     """
     Project root directory path. This is the base path for all other project directories.
     Many components depend on this variable, and it cannot be empty during project runtime.
     Should be set as an environment variable before starting the application.
     """
 
-    ATLAS_ETC_ROOT: str = Field(
-        default_factory=lambda: os.getenv('ATLAS_ETC_ROOT'),
-        description='Directory path for project configuration files'
-    )
+    ATLAS_ETC_ROOT: str = Field(default_factory=lambda: os.getenv('ATLAS_ETC_ROOT'), description='Directory path for project configuration files')
     """
     Configuration files directory path, typically used for storing TOML, JSON, YAML
     configuration files. Components use this path to locate their configuration files
     during instantiation. Defaults to {ATLAS_ROOT}/etc if not specified.
     """
 
-    ATLAS_LOGS_ROOT: str = Field(
-        default_factory=lambda: os.getenv('ATLAS_LOGS_ROOT'),
-        description='Directory path for application log files'
-    )
+    ATLAS_LOGS_ROOT: str = Field(default_factory=lambda: os.getenv('ATLAS_LOGS_ROOT'), description='Directory path for application log files')
     """
     Log files directory path where all application logs are stored.
     Used by logging components to determine log file locations.
     Defaults to {ATLAS_ROOT}/logs if not specified.
     """
 
-    ATLAS_DATA_ROOT: str = Field(
-        default_factory=lambda: os.getenv('ATLAS_DATA_ROOT'),
-        description='Directory path for application data files'
-    )
+    ATLAS_DATA_ROOT: str = Field(default_factory=lambda: os.getenv('ATLAS_DATA_ROOT'), description='Directory path for application data files')
     """
     Data files directory path for storing application-generated data,
     databases, cache files, and other persistent data.
     Defaults to {ATLAS_ROOT}/data if not specified.
     """
 
-    ATLAS_ENV: str = Field(
-        default_factory=lambda: os.getenv('ATLAS_ENV'),
-        description='Current runtime environment identifier (e.g., development, staging, production)'
-    )
+    ATLAS_ENV: str = Field(default_factory=lambda: os.getenv('ATLAS_ENV'), description='Current runtime environment identifier (e.g., development, staging, production)')
     """
     Runtime environment identifier used to determine application behavior,
     configuration selection, and feature flags. Common values include:
