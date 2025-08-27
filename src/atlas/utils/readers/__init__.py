@@ -1,20 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
-# @FileName      : setup.py
-# @Created Time  : 2025/8/22 14:00
+# @FileName      : __init__.py
+# @Created Time  : 2025/8/27 9:26
 # @Author        : FrostLeo
 # @Email         : FrostLeo.Dev@gmail.com
 # -----------------------------------------------------------------------------
 
 """
-**Atlas package setup programming**
+Description:
 
-This module is responsible for handling the installation of Atlas。
 """
-
-from setuptools import setup
-
-
-if __name__ == '__main__':
-    setup()
