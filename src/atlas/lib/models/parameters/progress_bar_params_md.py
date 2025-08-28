@@ -81,7 +81,7 @@ class ProgressBarParamsModel(AtlasBaseModel):
     transient: bool = Field(default=False, description='Whether to remove the progress bar from terminal after completion')
     """When True, the progress bar disappears after completion, leaving a clean terminal. Useful for temporary progress indicators that shouldn't clutter the output"""
 
-    refresh_per_second: int = Field(default=10, ge=1, le=60, description='Number of times per second to refresh the progress display')
+    refresh_per_second: int = Field(default=20, ge=1, le=60, description='Number of times per second to refresh the progress display')
     """Controls the visual update frequency of the progress bar. Higher values provide smoother animation but use more CPU"""
 
     custom_columns: Optional[List[str]] = Field(default=None, description='List of custom column names to display in the progress bar')

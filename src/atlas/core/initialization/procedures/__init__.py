@@ -2,17 +2,16 @@
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
 # @FileName      : __init__.py
-# @Created Time  : 2025/8/27 14:24
+# @Created Time  : 2025/8/28 15:15
 # @Author        : FrostLeo
 # @Email         : FrostLeo.Dev@gmail.com
 # -----------------------------------------------------------------------------
 
 """
-**Atlas toolkit**
+**All initialization procedures**
 """
 
-from atlas.utils.toolkit._machine_info import MachineInfo
-from atlas.utils.toolkit._progress_bar import ProgressBar
+from atlas.core.initialization.procedures._init_directory import InitDirectory
 
 
-__all__ = ['MachineInfo', 'ProgressBar']
+__all__ = ["InitDirectory"]
