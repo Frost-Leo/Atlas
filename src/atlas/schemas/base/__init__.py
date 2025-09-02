@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+__init__.py
+
+This module provides the base schema exports for the Atlas project, making the
+foundational BaseSchema class easily accessible to all schema definitions.
+
+- Author   : FrostLeo <frostleo.dev@gmail.com>
+- Created  : 2025/9/2 
+- Modified : 2025/9/2
+- License  : GPL-3.0
+"""
+
+from atlas.schemas.base._base_schema import BaseSchema
+
+
+__all__ = ['BaseSchema']

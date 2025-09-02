@@ -3,7 +3,8 @@
 """
 __init__.py
 
-This module provides all the exports of atlas.
+This module provides the main entry point and package-level exports for the Atlas
+project, including version information and core configuration settings.
 
 - Author   : FrostLeo <frostleo.dev@gmail.com>
 - Created  : 2025/9/2
