@@ -6,7 +6,7 @@ __init__.py
 This module provides 
 
 - Author   : FrostLeo <frostleo.dev@gmail.com>
-- Created  : 2025/9/3 
-- Modified : 2025/9/3
+- Created  : 2025/9/4 
+- Modified : 2025/9/4
 - License  : GPL-3.0
 """
