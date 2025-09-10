@@ -1,0 +1,5 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='900' height='50' viewBox='0 0 900 50'>
+    <text x='450' y='30' font-family='Segoe Print, cursive' font-weight='bold' fill='#1d1d1f' font-size='16' text-anchor='middle'>
+        A distributed, modular SDK for centralized data platform built on Django Rest Framework.
+    </text>
+</svg>
