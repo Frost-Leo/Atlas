@@ -1,0 +1,209 @@
+# pyproject.toml
+# Configuring setuptools using pyproject.toml files
+# - Author     : Frost Leo <frostleo.dev@gmail.com
+# - Created    : 2025/9/10
+# - Modified   : 2025/9/10
+# - License    : GPL-3.0
+
+[build-system]
+requires = ["setuptools>=78.1.1", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "atlas"
+dynamic = ["version"]
+description = "A distributed, modular SDK for centralized data platform built on Django Rest Framework."
+readme = "README.md"
+license = "GPL-3.0"
+license-files = ["LICENSE"]
+authors = [
+    {name = "Frost Leo", email = "frostleo.dev@gmail.com"},
+]
+maintainers = [
+    {name = "Frost Leo", email = "frostleo.dev@gmail.com"},
+]
+keywords = ["atlas", "data platform", "distributed", "modular"]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.13",
+    "Framework :: Pydantic :: 2",
+    "Framework :: Django",
+    "Framework :: Django :: 5.2",
+    "Framework :: OpenTelemetry",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.13"
+dependencies = [
+    "Django>=5.2.5",
+    "djangorestframework>=3.16.0",
+    "dynaconf>=3.2.11",
+    "psycopg2>=2.9.10",
+    "psutil>=7.0.0",
+    "pydantic>=2.11.7",
+    "opentelemetry-api>=1.36.0",
+    "opentelemetry-sdk>=1.36.0",
+]
+
+[project.urls]
+Download = "https://github.com/Frost-Leo/Atlas/archive/refs/heads/main.zip"
+Homepage = "https://github.com/Frost-Leo/Atlas"
+Issues = "https://github.com/Frost-Leo/Atlas/issues"
+Repository = "https://github.com/Frost-Leo/Atlas"
+Wiki = "https://github.com/Frost-Leo/Atlas/wiki"
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=1.17.1",
+    "pytest>=8.4.1",
+    "pytest-cov>=7.0.0",
+    "pytest-mock>=3.15.0",
+    "PyYAML>=6.0.2",
+    "tomli>=2.2.1",
+    "tomli-w>=1.2.0"
+]
+test = [
+    "pytest>=8.4.1",
+    "pytest-cov>=7.0.0",
+    "pytest-mock>=3.15.0",
+]
+
+[project.scripts]
+atlas = "atlas.cli:main"
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "atlas.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+pythonpath = ["src"]
+norecursedirs = [
+    ".git",
+    ".tox",
+    "dist",
+    "build",
+    "*.egg",
+    "__pycache__",
+    ".venv",
+    "venv",
+    "node_modules",
+    "migrations"
+]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+    "--cov=atlas",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-fail-under=80",
+    "--maxfail=3",
+    "--durations=10"
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "django: marks tests that require Django setup",
+    "api: marks tests for API endpoints",
+    "db: marks tests that require database access",
+    "external: marks tests that require external services",
+    "smoke: marks tests as smoke tests",
+    "regression: marks tests as regression tests"
+]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s - %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+log_file = "tests/pytest.log"
+log_file_level = "DEBUG"
+minversion = "8.0"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning"
+]
+
+[tool.coverage.run]
+source = ["src/atlas"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "*/__init__.py",
+    "*/settings/*"
+]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+
+[tool.mypy]
+python_version = "3.13"
+mypy_path = ["src"]
+namespace_packages = true
+follow_imports = "normal"
+ignore_missing_imports = false
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_calls = true
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_any_unimported = true
+disallow_subclassing_any = true
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unreachable = true
+implicit_reexport = false
+strict_equality = true
+show_error_codes = true
+pretty = true
+color_output = true
+incremental = true
+cache_dir = ".mypy_cache"
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+
+[[tool.mypy.overrides]]
+module = "atlas.migrations.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = [
+    "django.*",
+    "rest_framework.*",
+    "psycopg2.*",
+    "dynaconf.*",
+    "psutil.*"
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "atlas.*.admin"
+disallow_untyped_defs = false
+
+[[tool.mypy.overrides]]
+module = "atlas.*.apps"
+disallow_untyped_defs = false
