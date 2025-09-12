@@ -1,3 +1,4 @@
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -210,3 +211,47 @@ logs/*.json
 log/
 log/*.json
 **/log/*.json
+
+
+
+# Test outputs
+pytest.log
+test-results/
+test-reports/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+.directory
+
+# Editor backups
+*.bak
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+.temp/
+.tmp/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Secrets and credentials
+*.pem
+*.key
+secrets/
+credentials/

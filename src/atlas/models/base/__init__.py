@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+__init__.py
+
+Atlas Basic Data Model Collection.
+
+- Author   : FrostLeo <frostleo.dev@gmail.com>
+- Created  : 2025/9/11 
+- Modified : 2025/9/11
+- License  : GPL-3.0
+"""
+
+from atlas.models.base._internal_base_model import InternalBaseModel
+
+__all__ = ["InternalBaseModel"]
