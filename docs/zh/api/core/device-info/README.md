@@ -6,46 +6,141 @@
 
 ## 架构
 
-### 📊 交互式架构图表
-
-<iframe src="../../../../assets/diagrams/device-info-architecture-zh.html" 
-        width="100%" 
-        height="600" 
-        frameborder="0" 
-        style="border: 1px solid #ddd; border-radius: 8px; margin: 20px 0;">
-</iframe>
-
-> 上方是可拖动的交互式架构图表。如果无法显示，请[点击这里](../../../../assets/diagrams/device-info-architecture-zh.html)在新窗口中打开。
-
-### 静态架构图
+### 系统架构图
 
 ```mermaid
 graph TB
-    A[设备信息单例] --> B[平台信息]
-    A --> C[CPU 信息]
-    A --> D[内存信息]
-    A --> E[磁盘信息]
-    A --> F[网络信息]
+    %% 主服务节点
+    A["🏗️ DeviceInfo<br/>单例服务"]
     
-    B --> B1[系统检测]
-    B --> B2[机器 ID]
-    B --> B3[系统规格]
+    %% 五大信息收集模块
+    B["🖥️ 平台信息<br/>Platform Info"]
+    C["⚡ CPU 信息<br/>CPU Info"]
+    D["💾 内存信息<br/>Memory Info"]
+    E["💿 磁盘信息<br/>Disk Info"]
+    F["🌐 网络信息<br/>Network Info"]
     
-    C --> C1[CPU 详情]
-    C --> C2[性能指标]
-    C --> C3[缓存信息]
+    %% 平台信息子模块
+    B1["🔍 系统检测<br/>OS Detection"]
+    B2["🆔 机器 ID<br/>Machine ID"]
+    B3["📊 系统规格<br/>System Specs"]
     
-    D --> D1[内存使用]
-    D --> D2[交换信息]
-    D --> D3[缓冲/缓存]
+    %% CPU信息子模块
+    C1["🔧 CPU 详情<br/>CPU Details"]
+    C2["📈 性能指标<br/>Performance"]
+    C3["🗄️ 缓存信息<br/>Cache Info"]
     
-    E --> E1[分区信息]
-    E --> E2[磁盘使用]
-    E --> E3[I/O 统计]
+    %% 内存信息子模块
+    D1["📊 内存使用<br/>Memory Usage"]
+    D2["🔄 交换信息<br/>Swap Info"]
+    D3["⚡ 缓冲/缓存<br/>Buffer/Cache"]
     
-    F --> F1[网络接口]
-    F --> F2[IP 信息]
-    F --> F3[速度测试]
+    %% 磁盘信息子模块
+    E1["📂 分区信息<br/>Partition Info"]
+    E2["📊 磁盘使用<br/>Disk Usage"]
+    E3["⚡ I/O 统计<br/>I/O Statistics"]
+    
+    %% 网络信息子模块
+    F1["🔌 网络接口<br/>Interfaces"]
+    F2["🌍 IP 信息<br/>IP Information"]
+    F3["🚀 速度测试<br/>Speed Tests"]
+    
+    %% 主要连接
+    A --> B
+    A --> C
+    A --> D
+    A --> E
+    A --> F
+    
+    %% 子模块连接
+    B --> B1
+    B --> B2
+    B --> B3
+    
+    C --> C1
+    C --> C2
+    C --> C3
+    
+    D --> D1
+    D --> D2
+    D --> D3
+    
+    E --> E1
+    E --> E2
+    E --> E3
+    
+    F --> F1
+    F --> F2
+    F --> F3
+    
+    %% 样式定义
+    classDef mainService fill:#2196F3,stroke:#1976D2,stroke-width:3px,color:#fff
+    classDef platformModule fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    classDef cpuModule fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    classDef memoryModule fill:#9C27B0,stroke:#7B1FA2,stroke-width:2px,color:#fff
+    classDef diskModule fill:#F44336,stroke:#D32F2F,stroke-width:2px,color:#fff
+    classDef networkModule fill:#00BCD4,stroke:#0097A7,stroke-width:2px,color:#fff
+    classDef subModule fill:#E0E0E0,stroke:#9E9E9E,stroke-width:1px,color:#333
+    
+    %% 应用样式
+    class A mainService
+    class B platformModule
+    class C cpuModule
+    class D memoryModule
+    class E diskModule
+    class F networkModule
+    class B1,B2,B3,C1,C2,C3,D1,D2,D3,E1,E2,E3,F1,F2,F3 subModule
+```
+
+### 数据流程图
+
+```mermaid
+flowchart LR
+    %% 输入参数
+    START["🚀 开始收集"]
+    PARAMS["⚙️ 收集参数<br/>GetDeviceInfoParams"]
+    
+    %% 收集过程
+    COLLECT["🔄 信息收集器"]
+    
+    %% 各模块收集
+    PLATFORM["🖥️ 平台信息收集"]
+    CPU["⚡ CPU 信息收集"]
+    MEMORY["💾 内存信息收集"]
+    DISK["💿 磁盘信息收集"]
+    NETWORK["🌐 网络信息收集"]
+    
+    %% 结果聚合
+    AGGREGATE["📦 结果聚合"]
+    RESULT["✅ 最终结果<br/>GetDeviceInfoReturn"]
+    
+    %% 流程连接
+    START --> PARAMS
+    PARAMS --> COLLECT
+    
+    COLLECT --> PLATFORM
+    COLLECT --> CPU
+    COLLECT --> MEMORY
+    COLLECT --> DISK
+    COLLECT --> NETWORK
+    
+    PLATFORM --> AGGREGATE
+    CPU --> AGGREGATE
+    MEMORY --> AGGREGATE
+    DISK --> AGGREGATE
+    NETWORK --> AGGREGATE
+    
+    AGGREGATE --> RESULT
+    
+    %% 样式
+    classDef startEnd fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    classDef process fill:#2196F3,stroke:#1976D2,stroke-width:2px,color:#fff
+    classDef collector fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    classDef result fill:#9C27B0,stroke:#7B1FA2,stroke-width:2px,color:#fff
+    
+    class START,RESULT startEnd
+    class PARAMS,COLLECT,AGGREGATE process
+    class PLATFORM,CPU,MEMORY,DISK,NETWORK collector
 ```
 
 ## 核心特性
