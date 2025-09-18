@@ -128,7 +128,6 @@ markers = [
     "smoke: marks tests as smoke tests",
     "regression: marks tests as regression tests"
 ]
-DJANGO_SETTINGS_MODULE = "tests.settings"
 log_cli = true
 log_cli_level = "INFO"
 log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s - %(message)s"

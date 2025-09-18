@@ -12,10 +12,8 @@ This module provides test fixtures for InternalBaseModel testing
 """
 
 import pytest
-from enum import Enum
 from typing import Optional
 from pydantic import ConfigDict, Field, field_validator, model_validator
-from pydantic.alias_generators import to_camel
 
 from atlas.models.base import InternalBaseModel
 from tests.fixtures.models.general.fixtures import string_test_model

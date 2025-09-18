@@ -3,7 +3,7 @@
 """
 __init__.py
 
-This module provides models unit tests
+This module provides device information models unit tests
 
 - Author   : FrostLeo <frostleo.dev@gmail.com>
 - Created  : 2025/9/18 

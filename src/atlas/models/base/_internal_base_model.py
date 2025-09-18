@@ -11,8 +11,11 @@ The base model of the internal data model of Atlas.
 - License  : GPL-3.0
 """
 
-from pydantic import BaseModel, ConfigDict
+from datetime import datetime, timezone
+from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_snake
+
+from atlas import __version__
 
 
 class InternalBaseModel(BaseModel):
@@ -23,13 +26,15 @@ class InternalBaseModel(BaseModel):
 
     Attributes:
         model_config (ConfigDict): Global configuration of the model
+        version (str): Version number of all models
+        created_at (datetime): Timestamp when model instantiation
     """
 
     model_config = ConfigDict(
         str_strip_whitespace=True,                      # Trim leading and trailing whitespace from string
         str_max_length=100000,                          # Limit string length to prevent DoS attacks
         extra="forbid",                                 # Prohibit adding additional fields to ensure model security
-        frozen=True,                                    # After creating an instance, modifications are not allowed
+        frozen=False,                                   # After creating an instance, modifications are allowed
         strict=True,                                    # Strict mode validation
         validate_assignment=True,                       # Validation is also required when modifying model attributes
         validate_default=True,                          # Validate default values during validation
@@ -66,7 +71,7 @@ class InternalBaseModel(BaseModel):
     This ensures data integrity and prevents injection of unexpected data fields.
 
     **frozen**: Makes model instances immutable after creation.
-    Once created, no attributes can be modified, ensuring data consistency and thread safety.
+    Once created, attributes can be modified.
 
     **strict**: Enables strict type validation without automatic type coercion.
     Values must match the exact expected type, preventing subtle type-related bugs.
@@ -134,3 +139,13 @@ class InternalBaseModel(BaseModel):
     **use_attribute_docstrings**: Uses attribute docstrings as field descriptions.
     This automatically generates field documentation from inline docstrings in the model definition.
     """
+
+    version: str = Field(
+        default=__version__,
+        description="Version numbers of all models"
+    )
+
+    created_at: datetime = Field(
+        default_factory=lambda : datetime.now(tz=timezone.utc),
+        description="Timestamp when model instantiation"
+    )
